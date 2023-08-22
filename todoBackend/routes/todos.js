@@ -15,11 +15,21 @@ router.get('/' ,async (req,res)=>{
 })
 
 router.post('/' , async (req,res)=>{
-  let todolength = await Todo.find()
-  const todoItem = new Todo({
-    item: req.body.item
-  })
   try{
+    try{
+      let existinguser = await Todo.findOne({item: req.body.item})
+      if(existinguser){
+        res.status(400).json({msg : "This Item has been already included"})
+        return
+      }
+    }catch(error){
+      console.log("error encountered" , error)
+      res.json({msg: "Dont add the same item"})
+    }
+
+    const todoItem = new Todo({
+      item: req.body.item
+    })
     await todoItem.save()
     const todos = await Todo.find()
     res.json(todos)

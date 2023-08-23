@@ -1,8 +1,10 @@
 const express = require("express")
 const app = express()
+const cors = require('cors')
 const mongoose = require('mongoose')
 const Todo = require('./models/todo')
 const todoRouter = require('./routes/todos')
+app.use(cors())
 app.use(express.json())
 app.use("/api/todo",todoRouter)
 app.get('/',(req,res)=>{
